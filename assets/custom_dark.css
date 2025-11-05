@@ -1,0 +1,115 @@
+/* ===== Base page + card contrast ===== */
+body { background-color: #121212; }
+.card.bg-dark {
+  background-color: #191b1d !important;
+  border: 1px solid #3a3d41 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  border-radius: 10px;
+}
+.card .card-header.bg-dark {
+  background-color: #17191a !important;
+  border-bottom: 1px solid #3a3d41 !important;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.border-secondary { border-color: #3a3d41 !important; }
+.form-control.bg-dark { background-color: #1e1e1e !important; border-color: #3a3d41 !important; color: #f4f4f4 !important; }
+.js-plotly-plot, .dash-graph { border-top: 1px solid #3a3d41; border-radius: 6px; }
+.ag-theme-quartz-dark { --ag-border-color: #3a3d41; --ag-borders: solid 1px var(--ag-border-color); --ag-row-border-color: #2f3236; }
+.ag-theme-quartz-dark .ag-root-wrapper { border: 1px solid #3a3d41; border-radius: 8px; }
+footer { color: #9aa0a6; border-top: 1px solid #3a3d41; margin-top: 8px; padding-top: 12px; }
+
+/* =======================================================================
+   DARK THEME FOR dcc.Dropdown (Coins)
+   We scope to .cn-dark-dropdown for the control itself AND add global
+   fallbacks because the menu panel can be portaled outside the control.
+   ======================================================================= */
+
+/* -- Control (legacy React-Select v1 classes) -- */
+.cn-dark-dropdown .Select-control,
+.cn-dark-dropdown .Select-multi-value-wrapper,
+.cn-dark-dropdown .Select-placeholder,
+.cn-dark-dropdown .Select-input > input,
+.cn-dark-dropdown .Select-value,
+.cn-dark-dropdown .Select-value-label {
+  background-color: #1e1e1e !important;
+  color: #f4f4f4 !important;
+  border-color: #444 !important;
+}
+
+/* -- Control (newer React-Select classes with hashed names) -- */
+.cn-dark-dropdown [class$='-control'],
+.cn-dark-dropdown [class*='-control'] {
+  background-color: #1e1e1e !important;
+  color: #f4f4f4 !important;
+  border-color: #444 !important;
+}
+
+/* -- Multi chips (both syntaxes) -- */
+.cn-dark-dropdown .Select--multi .Select-value,
+.cn-dark-dropdown [class*='-multiValue'] {
+  background-color: #2c2c2c !important;
+  border: 1px solid #555 !important;
+  color: #fff !important;
+}
+
+/* -- Placeholder / single value (newer) -- */
+.cn-dark-dropdown [class*='-singleValue'],
+.cn-dark-dropdown [class*='-placeholder'] {
+  color: #ddd !important;
+}
+
+/* -- Indicators / separators (newer) -- */
+.cn-dark-dropdown [class*='-indicatorSeparator'] { background-color: #444 !important; }
+
+/* -------- Menu panel (legacy) -------- */
+.Select-menu-outer,
+.Select-menu,
+.VirtualizedSelectOption,
+.VirtualizedSelectFocusedOption {
+  background-color: #1e1e1e !important;
+  color: #f4f4f4 !important;
+  border-color: #333 !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.55);
+  z-index: 10050; /* above cards/plots */
+}
+
+/* Legacy options */
+.Select-option { background-color: #1e1e1e !important; color: #f4f4f4 !important; }
+.Select-option.is-focused { background-color: #2b2b2b !important; }
+.Select-option.is-selected { background-color: #3a3a3a !important; }
+
+/* -------- Menu panel (newer hashed classes) -------- */
+[class*='-menu'],
+[class*='-menu-list'],
+[class*='-option'] {
+  background-color: #1e1e1e !important;
+  color: #f4f4f4 !important;
+  border-color: #333 !important;
+}
+[class*='-option']:hover,
+[class*='-option'][class*='-is-focused'] {
+  background-color: #2b2b2b !important;
+}
+[class*='-option'][class*='-is-selected'] {
+  background-color: #3a3a3a !important;
+}
+
+/* Arrow / clear zones (legacy) */
+.Select-arrow { border-top-color: #bbb !important; }
+.Select-clear-zone, .Select-arrow-zone { color: #ccc !important; }
+
+/* Placeholder (legacy + newer) */
+.Select-placeholder,
+[class*='-placeholder'] { color: #aaa !important; }
+
+/* Make sure the control has a visible outline when focused */
+.cn-dark-dropdown .Select-control,
+.cn-dark-dropdown [class$='-control'],
+.cn-dark-dropdown [class*='-control'] {
+  box-shadow: 0 0 0 2px rgba(62, 120, 255, 0.12) !important;
+}
+
+/* Widen z-index for safety if menu is portaled */
+.cn-dark-dropdown,
+.Select-menu-outer { z-index: 10050; }
