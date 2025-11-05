@@ -20,5 +20,4 @@ COPY . /app
 ENV PORT=7860
 EXPOSE 7860
 
-# Start the Dash app (your app.py already reads PORT env)
 CMD ["python", "app.py"]
