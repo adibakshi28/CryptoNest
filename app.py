@@ -265,7 +265,7 @@ def brand_header() -> html.Div:
                             html.Div(
                                 children=[
                                     html.Div("CryptoNest by QuantNest", className="fw-semibold", style={"fontSize": "1.25rem"}),
-                                    html.Small("Portfolio factor analytics • exposures • contributions • correlations", className="text-muted"),
+                                    html.Small("Portfolio factor analytics", className="text-muted"),
                                 ]
                             ),
                         ],
@@ -442,93 +442,40 @@ def factors_corr_tab():
                             ),
                         ],
                     ),
+                    # small hint text (optional)
+                    html.Small("Press Update to compute; results will appear below.", className="text-muted"),
                 ],
             ),
+
+            # 🔒 Hidden until Update is pressed
             html.Div(
-                className="factor-grid",
+                id="factor-results",
+                className="initially-hidden",
                 children=[
                     html.Div(
+                        className="factor-grid",
                         children=[
-                            small_card("Factor Returns Time Series", [
-                                dcc.Graph(id="factors-graph", config={"displayModeBar": True}),
-                            ])
-                        ],
-                    ),
-                    html.Div(
-                        children=[
-                            small_card("Factor Correlation Matrix", [
-                                dcc.Graph(id="corr-heatmap", config={"displayModeBar": True}),
-                            ])
-                        ],
-                    ),
-                    html.Div(
-                        children=[
-                            small_card("Factor Returns Statistics", [
-                                dag.AgGrid(
-                                    id="factors-grid",
-                                    className="ag-theme-quartz-dark",
-                                    columnDefs=[],
-                                    defaultColDef={
-                                        "sortable": True,
-                                        "filter": True,
-                                        "floatingFilter": True,
-                                        "resizable": True
-                                    },
-                                    rowData=[],
-                                    dashGridOptions={
-                                        "pagination": True,
-                                        "paginationPageSize": 10,
-                                        "ensureDomOrder": True,
-                                        "enableCellTextSelection": True
-                                    },
-                                    style={"height": "300px", "width": "100%"},
-                                )
-                            ])
-                        ],
-                    ),
-                    html.Div(
-                        children=[
-                            small_card("Correlation Matrix Data", [
-                                dag.AgGrid(
-                                    id="corr-grid",
-                                    className="ag-theme-quartz-dark",
-                                    columnDefs=[],
-                                    defaultColDef={
-                                        "sortable": True,
-                                        "filter": True,
-                                        "floatingFilter": True,
-                                        "resizable": True
-                                    },
-                                    rowData=[],
-                                    dashGridOptions={
-                                        "pagination": True,
-                                        "paginationPageSize": 10
-                                    },
-                                    style={"height": "300px", "width": "100%"},
-                                )
-                            ])
+                            small_card("Factor Returns Time Series", [dcc.Graph(id="factors-graph", config={"displayModeBar": True})]),
+                            small_card("Factor Correlation Matrix",   [dcc.Graph(id="corr-heatmap",  config={"displayModeBar": True})]),
+                            small_card("Factor Returns Statistics",  [dag.AgGrid(id="factors-grid", className="ag-theme-quartz-dark",
+                                                                             columnDefs=[], rowData=[], style={"height": "300px", "width": "100%"})]),
+                            small_card("Correlation Matrix Data",    [dag.AgGrid(id="corr-grid",    className="ag-theme-quartz-dark",
+                                                                             columnDefs=[], rowData=[], style={"height": "300px", "width": "100%"})]),
                         ],
                     ),
                 ],
             ),
+
             html.Div(
                 className="mt-3 d-grid gap-2 d-md-flex justify-content-md-end",
                 children=[
-                    html.Button(
-                        "Download Factor Returns",
-                        id="btn-factors",
-                        className="btn btn-outline-light me-md-2"
-                    ),
-                    html.Button(
-                        "Download Correlation Matrix",
-                        id="btn-corr-matrix",
-                        className="btn btn-outline-light"
-                    ),
+                    html.Button("Download Factor Returns", id="btn-factors", className="btn btn-outline-light me-md-2"),
+                    html.Button("Download Correlation Matrix", id="btn-corr-matrix", className="btn btn-outline-light"),
                     dcc.Download(id="dl-factors"),
                     dcc.Download(id="dl-corr-matrix"),
                 ],
             ),
-        ]
+        ],
     )
 
 results_tabs = html.Div(
@@ -972,6 +919,20 @@ def download_corr_matrix(_n, data_json):
         return no_update
     df = pd.read_json(data_json, orient="split")
     return dcc.send_data_frame(df.to_csv, "correlation_matrix.csv")
+
+
+@app.callback(
+    Output("factor-results", "className"),
+    Input("update-factors-btn", "n_clicks"),
+    State("store-factor-data", "data"),
+    State("factors-select", "value"),
+    prevent_initial_call=True,
+)
+def show_factor_results(n, factor_data_json, selected_factors):
+    if n and factor_data_json and selected_factors:
+        return "results-visible"
+    return no_update
+
 
 # =========================
 # Main
